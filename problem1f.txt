@@ -1,0 +1,10 @@
+SELECT count(docid) FROM (
+
+SELECT table1.docid
+FROM frequency table1
+INNER JOIN frequency table2
+ON table1.docid = table2.docid
+AND table1.term = 'transactions' AND table2.term = 'world'
+ORDER BY table1.term
+
+) x;

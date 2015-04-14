@@ -1,0 +1,31 @@
+CREATE VIEW A AS
+SELECT * FROM frequency
+UNION
+SELECT 'q' as docid, 'washington' as term, 1 as count 
+UNION
+SELECT 'q' as docid, 'taxes' as term, 1 as count
+UNION 
+SELECT 'q' as docid, 'treasury' as term, 1 as count;
+
+
+
+--SELECT * FROM A;
+
+
+
+SELECT docid, simscore
+FROM(
+	SELECT matrixT.docid, matrixT.term, matrixT.count, SUM(matrix.count * matrixT.count) simscore
+		FROM (
+			A matrix
+			JOIN A matrixT 
+			ON matrixT.term = matrix.term AND matrix.docid = 'q' AND matrixT.docid <> 'q'
+		)
+		GROUP BY matrixT.count, matrixT.docid
+	) 
+GROUP BY simscore, docid
+;
+
+
+
+DROP VIEW A;
